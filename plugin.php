@@ -31,13 +31,18 @@ add_action( 'widgets_init', create_function( '', "register_widget( 'My_Widget' )
 class My_Widget extends WP_Widget {
 
 	/**
+	 * The plugin version, used as the version for dependencies.
+	 *
+	 * @since 1.0.0
+	 */
+	const version = '1.0.0';
+
+	/**
 	 * The text domain for localization.
 	 *
 	 * @since 1.0.0
 	 */
 	const domain = 'my-widget';
-
-	const version = '1.0.0';
 
 	/**
 	 * Sets up the widget initilisation.
@@ -161,14 +166,16 @@ class My_Widget extends WP_Widget {
 
 		global $current_screen;
 
+		// If debugging, reference unminified files, with a constantly fresh cache buster.
 		$suffix = ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ? '.dev' : '';
+		$version = ( defined ( 'WP_DEBUG' ) && WP_DEBUG ) ? time() : self::version;
 
 		if( is_admin() && 'widgets' == $current_screen->id ) {
-			wp_enqueue_script( __CLASS__,  plugins_url( 'js/admin' . $suffix . '.js', __FILE__ ), array( 'jquery' ), self::version, true );
-			wp_enqueue_style(__CLASS__, plugins_url( 'css/admin' . $suffix . '.css', __FILE__ ), false, self::version );
+			wp_enqueue_script( __CLASS__,  plugins_url( 'js/admin' . $suffix . '.js', __FILE__ ), array( 'jquery' ), $version, true );
+			wp_enqueue_style(__CLASS__, plugins_url( 'css/admin' . $suffix . '.css', __FILE__ ), false, $version );
 		} elseif ( ! is_admin() && is_active_widget( false, false, $this->id_base ) ) {
-			wp_enqueue_script( __CLASS__,  plugins_url( 'js/widget' . $suffix . '.js', __FILE__ ), array( 'jquery' ), self::version, true );
-			wp_enqueue_style(__CLASS__, plugins_url( 'css/widget' . $suffix . '.css', __FILE__ ), false, self::version );
+			wp_enqueue_script( __CLASS__,  plugins_url( 'js/widget' . $suffix . '.js', __FILE__ ), array( 'jquery' ), $version, true );
+			wp_enqueue_style(__CLASS__, plugins_url( 'css/widget' . $suffix . '.css', __FILE__ ), false, $version );
 		}
 
 	}

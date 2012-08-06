@@ -45,7 +45,7 @@ class My_Widget extends WP_Widget {
 	const domain = 'my-widget';
 
 	/**
-	 * Sets up the widget initilisation.
+	 * Sets up the widget initialization.
 	 *
 	 * @since 1.0.0
 	 */
